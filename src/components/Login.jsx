@@ -8,18 +8,21 @@ export const Login = (props) => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    console.log(process.env.REACT_APP_API_URL);
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            let endpoint = `${process.env.REACT_APP_API_URL}/api/login`;
+            const apiUrl = "http://localhost:9001";
+            const endpoint = `${apiUrl}/api/login`;
+
             const response = await axios.post(endpoint, { username, password });
 
             if (response.status === 200) {
                 const isAdmin = response.data.isAdmin;
                 if (isAdmin) {
+                    // Redirect to admin dashboard with username parameter
                     navigate(`/admindash/${username}`);
                 } else {
+                    // Redirect to user dashboard with username parameter
                     navigate(`/userdash/${username}`);
                 }
             } else {
