@@ -6,8 +6,7 @@ const LoginForm = ({ userType }) => { // Pass userType prop to determine if it's
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
-    password: '',
-    passwordKey: '' // Add passwordKey state for admin login
+    password: ''
   });
   const [error, setError] = useState('');
 
@@ -31,9 +30,9 @@ const LoginForm = ({ userType }) => { // Pass userType prop to determine if it's
       // Store token in localStorage
       localStorage.setItem('token', token); 
       if (userType === 'admin') {
-        navigate('/admin-dashboard');
+        navigate(`/admindash/${formData.username}`);
       } else {
-        navigate(`/user-dashboard/${formData.username}`);
+        navigate(`/userdash/${formData.username}`);
       }
     } catch (error) {
       setError('Invalid username or password');
