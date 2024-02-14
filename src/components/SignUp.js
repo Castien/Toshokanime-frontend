@@ -1,5 +1,3 @@
-// components/SignUpPage.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -24,13 +22,13 @@ const SignUp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('/api/signup', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, formData);
       const { token, isAdmin } = response.data;
       localStorage.setItem('token', token);
       if (isAdmin) {
-        navigate.push('/admin-dashboard');
+        navigate.push(`/Admin/${formData.username}`); //admin dashboard
       } else {
-        navigate.push('/user-dashboard');
+        navigate.push(`/Userdash/${formData.username}`); //user dashboard
       }
     } catch (error) {
       console.error('Signup error:', error.message);

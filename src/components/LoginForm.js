@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Assuming you're using axios for API requests
+import axios from 'axios';
 
-const LoginForm = () => {
+const LoginForm = ({ userType }) => { // Pass userType prop to determine if it's admin or user login
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
-    password: ''
+    password: '',
+    passwordKey: '' // Add passwordKey state for admin login
   });
   const [error, setError] = useState('');
 
@@ -21,11 +22,19 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('/api/login', formData);
+      let endpoint = `${process.env.REACT_APP_API_URL}/login`;
+      if (userType === 'admin') { // Modify endpoint for admin login
+        endpoint = `${process.env.REACT_APP_API_URL}/admin/login`;
+      }
+      const response = await axios.post(endpoint, formData); // Use the appropriate endpoint
       const { token } = response.data;
       // Store token in localStorage
       localStorage.setItem('token', token); 
-      navigate.push('/');
+      if (userType === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate(`/user-dashboard/${formData.username}`);
+      }
     } catch (error) {
       setError('Invalid username or password');
     }
@@ -33,7 +42,7 @@ const LoginForm = () => {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>{userType === 'admin' ? 'Admin Login' : 'User Login'}</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username:</label>
@@ -57,6 +66,19 @@ const LoginForm = () => {
             required 
           />
         </div>
+        {userType === 'admin' && ( // Display passwordKey input only for admin login
+          <div>
+            <label htmlFor="passwordKey">Admin Password Key:</label>
+            <input 
+              type="password" 
+              id="passwordKey" 
+              name="passwordKey" 
+              value={formData.passwordKey} 
+              onChange={handleChange} 
+              required 
+            />
+          </div>
+        )}
         {error && <p>{error}</p>} {/* Display error message if login fails */}
         <button type="submit">Login</button>
       </form>
