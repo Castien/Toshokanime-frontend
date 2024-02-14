@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Assuming you're using axios for API requests
 
 const LoginForm = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -25,7 +25,7 @@ const LoginForm = () => {
       const { token } = response.data;
       // Store token in localStorage
       localStorage.setItem('token', token); 
-      history.push('/');
+      navigate.push('/');
     } catch (error) {
       setError('Invalid username or password');
     }
