@@ -52,8 +52,8 @@ const SignUp = () => {
           <input type="password" id="password" name="password" placeholder="Password" required onChange={handleChange} />
         </div>
         <div>
-          <label htmlFor="passwordKey">Admin Password Key:</label>
-          <input type="password" id="passwordKey" name="passwordKey" placeholder="Admin Only" onChange={handleChange} />
+          <label htmlFor="adminKey">Admin Password Key:</label>
+          <input type="password" id="adminKey" name="adminKey" placeholder="Admin Only" onChange={handleChange} />
         </div>
         <button type="submit">Sign Up</button>
       </form>
