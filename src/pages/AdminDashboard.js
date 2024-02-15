@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -16,6 +17,14 @@ const AdminDashboard = () => {
       <h2>Welcome to Admin Dashboard</h2>
       {/* Add admin dashboard content here */}
       <button onClick={handleLogout}>Logout</button>
+
+      <ul>
+        {/* Add a link to MainLibrary.js */}
+        <li>
+          <Link to="/main-library">Main Library</Link>
+        </li>
+        {/* Add other links as needed */}
+      </ul>
     </div>
   );
 };

@@ -46,13 +46,24 @@ const MainLibrary = () => {
     return isLoggedIn ? (
         <div className="main-library-container">
             <h2>Main Media Library</h2>
-            <ul>
-                {currentMainMedia.map(media => (
-                    <li key={media._id}>
-                        <Link to={`/media/${media._id}`}>{media.title}</Link>
-                    </li>
-                ))}
-            </ul>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        {/* Add more table headers as needed */}
+                    </tr>
+                </thead>
+                <tbody>
+                    {currentMainMedia.map(media => (
+                        <tr key={media._id}>
+                            <td><Link to={`/media/${media._id}`}>{media.title}</Link></td>
+                            <td>{media.description}</td>
+                            {/* Render more data columns as needed */}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             <nav>
                 <ul className="pagination">
                     {Array.from({ length: totalPages }, (_, index) => (
@@ -65,7 +76,7 @@ const MainLibrary = () => {
                 </ul>
             </nav>
         </div>
-    ) : null; // Return null if not logged in
+    ) : null;
 };
 
 export default MainLibrary;
