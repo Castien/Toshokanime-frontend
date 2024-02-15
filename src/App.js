@@ -1,46 +1,33 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import axios from 'axios';
-import { Login } from './components/Login';
-import { Register } from './components/Register';
-import AdminDashboard from './components/AdminDashboard';
-import UserDashboard from './components/UserDashboard';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [currentForm, setCurrentForm] = useState('login');
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('/api/user');
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Error fetching user data');
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Set the default form to login when the component mounts
+    setCurrentForm('login');
+  }, []); // Empty dependency array ensures this effect runs only once, when the component mounts
 
-    fetchUserData();
-  }, []);
-
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error}</p>;
+  const toggleForm = (formName) => {
+    setCurrentForm(formName);
+  }
 
   return (
     <Router>
       <div className="App">
+        {/* Render the appropriate form based on the currentForm state */}
+        {currentForm === "login" ? <Login onFormSwitch={toggleForm} /> : <Register onFormSwitch={toggleForm} />}
         {/* Define routes */}
-        <Routes>
+        <Routes>           
           <Route path="/" element={<Navigate to="/login" />} /> {/* Redirect to /login */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admindash/:username" element={<AdminDashboard user={user} />} /> {/* Pass user data */}
-          <Route path="/userdash/:username" element={<UserDashboard user={user} />} /> {/* Pass user data */}
+          <Route path="/admindash/:username" element={<AdminDashboard />} />
+          <Route path="/userdash/:username" element={<UserDashboard />} />
         </Routes>
       </div>
     </Router>

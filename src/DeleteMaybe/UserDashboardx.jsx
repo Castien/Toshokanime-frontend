@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Profile from './Profile';
+import Profile from '../components/Profile';
 import axios from 'axios';
 
 const UserDashboard = ({ user }) => { // Receive user prop as an argument

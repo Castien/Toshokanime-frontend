@@ -9,7 +9,7 @@ export const Register = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const response = await axios.post('/api/register', {
                 username,
@@ -42,3 +42,5 @@ export const Register = (props) => {
         </div>
     )
 }
+
+export default Register;
