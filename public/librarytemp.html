@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Library</title>
+    <style>
+        /* Add your CSS styles here */
+        .main-library-container {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .media-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .media-card h3 {
+            margin-top: 0;
+        }
+        .media-card p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-library-container">
+        <h2>Toshokanime Media Library</h2>
+        <div id="media-cards" class="media-cards">
+            <!-- Media cards will be added dynamically here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch data from the server
+        function fetchData() {
+            const apiUrl = "http://localhost:9001/api/media"; // Change URL as per your backend endpoint
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        const responseData = JSON.parse(xhr.responseText);
+                        displayMedia(responseData);
+                    } else {
+                        console.error('Error fetching data:', xhr.status);
+                        // You can handle error cases here
+                    }
+                }
+            };
+            xhr.open("GET", apiUrl);
+            xhr.send();
+        }
+
+        // Function to display media on the webpage
+        function displayMedia(mediaData) {
+            const mediaContainer = document.getElementById('media-cards');
+            mediaContainer.innerHTML = ''; // Clear existing content
+            mediaData.forEach(media => {
+                const mediaCard = document.createElement('div');
+                mediaCard.className = 'media-card';
+                mediaCard.innerHTML = `
+                    <h3>${media.title}</h3>
+                    <p>Type: ${media.type}</p>
+                    <p>Volume Subtitle: ${media.volumeSubtitle}</p>
+                    <p>Format: ${media.format}</p>
+                    <p>Studios: ${media.studios.join(', ')}</p>
+                    <p>Release Date: ${new Date(media.releaseDate).toLocaleDateString()}</p>
+                    <p>UPC/ISBN: ${media.upcIsbn}</p>
+                    <a href="/media/${media._id}">View Details</a>
+                `;
+                mediaContainer.appendChild(mediaCard);
+            });
+        }
+
+        // Fetch data when the page loads
+        window.onload = fetchData;
+    </script>
+</body>
+</html>

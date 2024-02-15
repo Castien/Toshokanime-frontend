@@ -35,7 +35,7 @@ const MainLibrary = () => {
 
     return (
         <div className="main-library-container">
-            <h2>Main Media Library</h2>
+            <h2>Toshokanime Media Library</h2>
             {error && <p>Error: {error}</p>} {/* Display error message if an error occurred */}
             <div className="media-cards">
                 {mainMedia.map(media => (

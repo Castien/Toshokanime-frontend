@@ -1,49 +1,42 @@
+// Login.js
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-export const Login = (props) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+const Login = ({ onLogin, onFormSwitch }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const apiUrl = "http://localhost:9001";
-            const endpoint = `${apiUrl}/api/login`;
-            const response = await axios.post(endpoint, { username, password });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const apiUrl = "http://localhost:9001";
+      const endpoint = `${apiUrl}/api/login`;
+      const response = await axios.post(endpoint, { username, password });
 
-            if (response.status === 200) {
-                const isAdmin = response.data.isAdmin;
-                if (isAdmin) {
-                    navigate(`/admindash/${username}`);
-                } else {
-                    navigate(`/userdash/${username}`);
-                }
-            } else {
-                setError('Invalid response from server');
-            }
-        } catch (error) {
-            setError('Invalid username or password');
-        }
-    };
+      if (response.status === 200) {
+        onLogin(); // Notify parent component about successful login
+      } else {
+        setError('Invalid response from server');
+      }
+    } catch (error) {
+      setError('Invalid username or password');
+    }
+  };
 
-    return (
-        <div className="auth-form-container">
-            <h2>Login</h2>
-            <form className="login-form" onSubmit={handleSubmit}>
-                <label htmlFor="username">username</label>
-                <input value={username} onChange={(loginE) => setUsername(loginE.target.value)} id="username" placeholder="username" />
-                <label htmlFor="password">password</label>
-                <input value={password} onChange={(loginE) => setPassword(loginE.target.value)} type="password" placeholder="********" id="password" name="password" />
-                <button type="submit">Log In</button>
-            </form>
-            <button className="link-btn" onClick={() => props.onFormSwitch('register')}>Don't have an account? Register here.</button>
-            {error && <p className="error-message">{error}</p>}
-        </div>
-    )
-}
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username</label>
+        <input value={username} onChange={(event) => setUsername(event.target.value)} id="username" placeholder="Username" />
+        <label htmlFor="password">Password</label>
+        <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Password" id="password" />
+        <button type="submit">Log In</button>
+      </form>
+      {error && <p className="error-message">{error}</p>}
+      <button onClick={() => onFormSwitch()}>New Account? Register!</button>
+    </div>
+  );
+};
 
 export default Login;

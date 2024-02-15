@@ -1,61 +1,42 @@
+// Register.js
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook to perform navigation
 
-const Register = (props) => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [adminKey, setAdminKey] = useState('');
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(''); // State for success message
-    const navigate = useNavigate(); // Initialize useNavigate hook
+const Register = ({ onLogin, onFormSwitch }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
-    const handleSubmit = async (signE) => {
-        signE.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const apiUrl = "http://localhost:9001";
+      const endpoint = `${apiUrl}/api/register`;
+      const response = await axios.post(endpoint, { username, password });
 
-        try {
-            const apiUrl = "http://localhost:9001";
-            const endpoint = `${apiUrl}/api/register`;
-            const response = await axios.post(endpoint, {
-                username,
-                email,
-                password,
-                adminKey
-            });
-    
-            // Display success message and redirect to login page after registration
-            setSuccessMessage("Your account is created! Thank you!");
-            setTimeout(() => {
-                navigate("/login"); // Navigate to login page
-            }, 3000); // Redirect after 3 seconds
-
-            console.log(response.data);
-        } catch (error) {
-            setError('Registration failed. Please try again.');
-            console.error(error);
-        }
+      if (response.status === 200) {
+        onLogin(); // Notify parent component about successful registration
+      } else {
+        setError('Invalid response from server');
+      }
+    } catch (error) {
+      setError('Error registering user');
     }
+  };
 
-    return (
-        <div className="auth-form-container">
-            <h2>Register</h2>
-            <form className="register-form" onSubmit={handleSubmit}>
-                <label htmlFor="username">username</label>
-                <input value={username} name="name" onChange={(signE) => setUsername(signE.target.value)} id="username" placeholder="username" />
-                <label htmlFor="email">email</label>
-                <input value={email} onChange={(signE) => setEmail(signE.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email" />
-                <label htmlFor="password">password</label>
-                <input value={password} onChange={(signE) => setPassword(signE.target.value)} type="password" placeholder="********" id="password" name="password" />
-                <label htmlFor="adminKey">admin access</label>
-                <input type="password" value={adminKey} onChange={(e) => setAdminKey(e.target.value)} id="adminKey" name="adminKey" placeholder="admin only" />
-                <button type="submit">Register</button>
-            </form>
-            <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Already have an account? Login here.</button>
-            {error && <p className="error-message">{error}</p>}
-            {successMessage && <p className="success-message">{successMessage}</p>}
-        </div>
-    )
-}
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username</label>
+        <input value={username} onChange={(event) => setUsername(event.target.value)} id="username" placeholder="Username" />
+        <label htmlFor="password">Password</label>
+        <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Password" id="password" />
+        <button type="submit">Register</button>
+      </form>
+      {error && <p className="error-message">{error}</p>}
+      <button onClick={() => onFormSwitch()}>Already have an Account? Login!</button>
+    </div>
+  );
+};
 
 export default Register;
