@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 
-const AuthContext = createContext();
+export const AuthContext = createContext(); // Export AuthContext as named export
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

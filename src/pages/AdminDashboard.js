@@ -1,6 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import MediaLibrary from './MainLibrary';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -17,14 +19,27 @@ const AdminDashboard = () => {
       <h2>Welcome to Admin Dashboard</h2>
       {/* Add admin dashboard content here */}
       <button onClick={handleLogout}>Logout</button>
-
-      <ul>
-        {/* Add a link to MainLibrary.js */}
-        <li>
-          <Link to="/main-library">Main Library</Link>
-        </li>
-        {/* Add other links as needed */}
-      </ul>
+      <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/navbar">Navbar</Link>
+            </li>
+            <li>
+              <Link to="/sidebar">Sidebar</Link>
+            </li>
+            <li>
+              <Link to="/media-library">Media Library</Link>
+            </li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path="/navbar" element={<Navbar />} />
+          <Route path="/sidebar" element={<Sidebar />} />
+          <Route path="/media-library" element={<MediaLibrary />} />
+        </Routes>
     </div>
   );
 };
