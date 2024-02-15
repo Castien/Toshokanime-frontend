@@ -48,3 +48,33 @@
     color: white;
     text-decoration: underline;
   }
+
+  .main-library-container {
+    width: 80%;
+    margin: 0 auto; /* Center the container horizontally */
+    align-content: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center; /* Center the pagination buttons horizontally */
+  list-style: none;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px; /* Adjust the spacing between pagination buttons */
+}
+
+.pagination button {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
